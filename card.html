@@ -4,13 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Business Card</title>
+  <!-- Font Awesome for icons -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
-  <!-- Include EmailJS Library -->
+  <!-- EmailJS Library -->
   <script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
-  <script type="text/javascript">
-    // Initialize EmailJS only if user credentials are provided (will be set later)
-    // This script may be reinitialized in our main JS after reading query parameters.
-  </script>
   <style>
     :root {
       --primary-color: #1e1e1e;
@@ -21,6 +18,7 @@
       --card-background: #ffffff;
       --body-bg: linear-gradient(135deg, #cfd8dc, #eceff1);
       --business-info-bg: #e0f7fa;
+      /* Dropdown header and button colors */
       --dropdown-header-color: #333;
       --dropdown-btn-bg: #00796b;
       --dropdown-btn-hover: #00695c;
@@ -36,6 +34,7 @@
       min-height: 100vh;
       position: relative;
     }
+    /* Card Container with rounded corners */
     .card-container {
       position: relative;
       width: 400px;
@@ -49,6 +48,7 @@
       margin: 1rem;
       transition: background-color 0.5s ease, box-shadow 0.5s ease;
     }
+    /* Settings Icon (Top Left) */
     #styleControlsContainer {
       position: absolute;
       top: 10px;
@@ -66,6 +66,7 @@
     #styleButton:hover {
       color: var(--secondary-color);
     }
+    /* Top Right Share Icon */
     .top-icons {
       position: absolute;
       top: 10px;
@@ -88,7 +89,7 @@
       display: none;
       position: absolute;
       top: 110%;
-      left: -20px;
+      left: -20px; /* Partly outside the card */
       background: #fff;
       border: 1px solid #ccc;
       border-radius: 4px;
@@ -103,6 +104,7 @@
     .setting-group:last-child {
       border-bottom: none;
     }
+    /* 3D Effect for Group Headers */
     .setting-header {
       background: linear-gradient(to bottom, #f8f8f8, #dcdcdc);
       border: 1px solid #ccc;
@@ -139,6 +141,7 @@
       background: var(--secondary-color);
       color: #fff;
     }
+    /* Only Apply button remains */
     .dropdown-btns {
       display: flex;
       flex-direction: column;
@@ -158,6 +161,7 @@
       background: var(--dropdown-btn-hover);
       box-shadow: 1px 1px 3px rgba(0,0,0,0.3);
     }
+    /* Mini Icons */
     .mini-icons {
       display: flex;
       justify-content: center;
@@ -179,6 +183,7 @@
       transform: translateY(-2px);
       box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
     }
+    /* Profile Section */
     .profile-section {
       display: flex;
       padding: 1rem;
@@ -234,6 +239,7 @@
       transform: scale(1.1);
       color: var(--accent-color);
     }
+    /* Business Info Section */
     .business-info-section {
       padding: 1rem;
       margin: 0.5rem;
@@ -260,6 +266,7 @@
       padding: 0.5rem;
       overflow-y: auto;
     }
+    /* Action Buttons Section */
     .action-buttons {
       display: grid;
       gap: 0.5rem;
@@ -286,6 +293,7 @@
     .contact-btn {
       transition: none !important;
     }
+    /* Social Links Section */
     .social-links {
       display: flex;
       justify-content: center;
@@ -307,6 +315,7 @@
       transform: translateY(-2px);
       box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
     }
+    /* Floating Feedback Button (fixed) */
     .floating-btn {
       position: fixed;
       bottom: 20px;
@@ -327,6 +336,7 @@
       background: var(--accent-color);
       transform: scale(1.1);
     }
+    /* Floating Live Chat Icon (outside card on right) */
     #floatingChatBtn {
       position: absolute;
       top: 40px;
@@ -346,6 +356,7 @@
       background: var(--accent-color);
       transform: scale(1.1);
     }
+    /* Live Chat Modal (centered) */
     .modal {
       display: none;
       position: fixed;
@@ -370,6 +381,7 @@
     .modal-content h3 {
       margin-top: 0;
     }
+    /* Chat Conversation Area */
     #chatConversation {
       max-height: 150px;
       overflow-y: auto;
@@ -579,21 +591,20 @@
   </div>
   <script>
     document.addEventListener("DOMContentLoaded", function () {
-      // Read query parameters
+      "use strict";
+      // Read URL parameters
       const params = new URLSearchParams(window.location.search);
-      // Retrieve EmailJS credentials from URL (if provided)
+      // Retrieve EmailJS credentials if provided
       const emailjs_user = params.get("emailjs_user") || "";
       const emailjs_service = params.get("emailjs_service") || "";
       const emailjs_template = params.get("emailjs_template") || "";
-
-      // If no EmailJS user is provided, hide the live chat icon
+      // If no EmailJS User ID, hide the live chat icon
       if (!emailjs_user) {
         document.getElementById("floatingChatBtn").style.display = "none";
       } else {
-        // Initialize EmailJS with provided user ID
         emailjs.init(emailjs_user);
       }
-
+      
       /* -------------------- Populate Card Info -------------------- */
       const profileImage = params.get("profileImage") || "";
       document.getElementById("cardProfileImage").src = profileImage;
@@ -635,6 +646,155 @@
         } else {
           element.style.visibility = "hidden";
         }
+      });
+      
+      /* -------------------- Settings Dropdown Behavior -------------------- */
+      const styleButton = document.getElementById("styleButton");
+      const styleDropdown = document.getElementById("styleDropdown");
+      styleButton.addEventListener("click", (e) => {
+        e.stopPropagation();
+        styleDropdown.style.display = styleDropdown.style.display === "block" ? "none" : "block";
+      });
+      document.addEventListener("click", (e) => {
+        if (!document.getElementById("styleControlsContainer").contains(e.target)) {
+          styleDropdown.style.display = "none";
+        }
+      });
+      // Toggle each group's content on header click
+      document.querySelectorAll(".setting-header").forEach(header => {
+        header.addEventListener("click", () => {
+          const content = header.nextElementSibling;
+          content.style.display = content.style.display === "block" ? "none" : "block";
+        });
+      });
+      
+      /* -------------------- Settings Option Selection -------------------- */
+      let selectedTheme = "default";
+      let selectedMood = "day";
+      let selectedIconStyle = "none";
+      
+      document.querySelectorAll("#themeGroup .setting-options li").forEach(li => {
+        li.addEventListener("click", () => {
+          selectedTheme = li.getAttribute("data-theme");
+          document.querySelectorAll("#themeGroup .setting-options li").forEach(el => el.style.background = "");
+          li.style.background = "#ddd";
+        });
+      });
+      
+      document.querySelectorAll("#moodGroup .setting-options li").forEach(li => {
+        li.addEventListener("click", () => {
+          selectedMood = li.getAttribute("data-mood");
+          document.querySelectorAll("#moodGroup .setting-options li").forEach(el => el.style.background = "");
+          li.style.background = "#ddd";
+        });
+      });
+      
+      document.querySelectorAll("#iconStyleGroup .setting-options li").forEach(li => {
+        li.addEventListener("click", () => {
+          selectedIconStyle = li.getAttribute("data-iconstyle");
+          document.querySelectorAll("#iconStyleGroup .setting-options li").forEach(el => el.style.background = "");
+          li.style.background = "#ddd";
+        });
+      });
+      
+      /* -------------------- Update Card Appearance -------------------- */
+      function updateCardAppearance() {
+        const card = document.querySelector(".card-container");
+        if (selectedTheme === "default") {
+          document.documentElement.style.setProperty("--secondary-color", "#009688");
+          document.documentElement.style.setProperty("--accent-color", "#FF5722");
+          document.documentElement.style.setProperty("--card-background", "#FFFFFF");
+          document.documentElement.style.setProperty("--body-bg", "linear-gradient(135deg, #CFD8DC, #ECEFF1)");
+          card.style.borderImage = `linear-gradient(45deg, #009688, #FF5722, #3F51B5) 1`;
+          card.style.boxShadow = "0 8px 30px rgba(0,0,0,0.2)";
+        } else if (selectedTheme === "blue") {
+          document.documentElement.style.setProperty("--secondary-color", "#2196F3");
+          document.documentElement.style.setProperty("--accent-color", "#E91E63");
+          document.documentElement.style.setProperty("--card-background", "#F0F8FF");
+          document.documentElement.style.setProperty("--body-bg", "linear-gradient(135deg, #BBDEFB, #E3F2FD)");
+          card.style.borderImage = `linear-gradient(45deg, #2196F3, #E91E63, #3F51B5) 1`;
+          card.style.boxShadow = "0 8px 30px rgba(33,150,243,0.4)";
+        } else if (selectedTheme === "red") {
+          document.documentElement.style.setProperty("--secondary-color", "#F44336");
+          document.documentElement.style.setProperty("--accent-color", "#9C27B0");
+          document.documentElement.style.setProperty("--card-background", "#FFF0F0");
+          document.documentElement.style.setProperty("--body-bg", "linear-gradient(135deg, #FFCDD2, #FFEBEE)");
+          card.style.borderImage = `linear-gradient(45deg, #F44336, #9C27B0, #FF9800) 1`;
+          card.style.boxShadow = "0 8px 30px rgba(244,67,54,0.4)";
+        } else if (selectedTheme === "green") {
+          document.documentElement.style.setProperty("--secondary-color", "#4CAF50");
+          document.documentElement.style.setProperty("--accent-color", "#8BC34A");
+          document.documentElement.style.setProperty("--card-background", "#E8F5E9");
+          document.documentElement.style.setProperty("--body-bg", "linear-gradient(135deg, #C8E6C9, #E8F5E9)");
+          card.style.borderImage = `linear-gradient(45deg, #4CAF50, #8BC34A, #388E3C) 1`;
+          card.style.boxShadow = "0 8px 30px rgba(76,175,80,0.4)";
+        }
+        if (selectedMood === "night") {
+          document.documentElement.style.setProperty("--card-background", "#2b2b2b");
+          document.documentElement.style.setProperty("--body-bg", "linear-gradient(135deg, #1a1a1a, #333333)");
+          document.documentElement.style.setProperty("--primary-color", "#f0f0f0");
+          document.documentElement.style.setProperty("--neutral-dark", "#f0f0f0");
+          document.documentElement.style.setProperty("--business-info-bg", "#444");
+        } else {
+          document.documentElement.style.setProperty("--card-background", "#FFFFFF");
+          document.documentElement.style.setProperty("--body-bg", "linear-gradient(135deg, #cfd8dc, #eceff1)");
+          document.documentElement.style.setProperty("--primary-color", "#1e1e1e");
+          document.documentElement.style.setProperty("--neutral-dark", "#333333");
+          document.documentElement.style.setProperty("--business-info-bg", "#e0f7fa");
+        }
+        if (selectedIconStyle === "styleA") {
+          document.querySelectorAll(".icon").forEach(el => {
+            el.style.borderRadius = "10px";
+            el.style.backgroundColor = "rgba(0,150,136,0.2)";
+          });
+          document.querySelectorAll(".social-icon").forEach(el => {
+            el.style.borderRadius = "10px";
+            el.style.backgroundColor = "rgba(0,150,136,0.2)";
+          });
+        } else if (selectedIconStyle === "styleB") {
+          document.querySelectorAll(".icon").forEach(el => {
+            el.style.borderRadius = "0px";
+            el.style.backgroundColor = "rgba(233,30,99,0.2)";
+          });
+          document.querySelectorAll(".social-icon").forEach(el => {
+            el.style.borderRadius = "0px";
+            el.style.backgroundColor = "rgba(233,30,99,0.2)";
+          });
+        } else {
+          document.querySelectorAll(".icon").forEach(el => {
+            el.style.borderRadius = "";
+            el.style.backgroundColor = "";
+          });
+          document.querySelectorAll(".social-icon").forEach(el => {
+            el.style.borderRadius = "";
+            el.style.backgroundColor = "";
+          });
+        }
+      }
+      function updateCardAppearanceAndSave() {
+        updateCardAppearance();
+        const newUrl = new URL(window.location.href);
+        newUrl.searchParams.set("theme", selectedTheme);
+        newUrl.searchParams.set("mood", selectedMood);
+        newUrl.searchParams.set("iconstyle", selectedIconStyle);
+        // Also pass EmailJS credentials so that card.html can initialize EmailJS for live chat
+        if(document.getElementById("emailjs_user")) {
+          const user = document.getElementById("emailjs_user").value.trim();
+          const service = document.getElementById("emailjs_service").value.trim();
+          const template = document.getElementById("emailjs_template").value.trim();
+          if(user) newUrl.searchParams.set("emailjs_user", user);
+          if(service) newUrl.searchParams.set("emailjs_service", service);
+          if(template) newUrl.searchParams.set("emailjs_template", template);
+        }
+        history.replaceState(null, "", newUrl.toString());
+      }
+      
+      /* -------------------- Group Apply Handlers -------------------- */
+      document.querySelectorAll(".apply-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          updateCardAppearanceAndSave();
+          btn.closest(".setting-content").style.display = "none";
+        });
       });
       
       /* -------------------- Live Chat Modal -------------------- */
@@ -683,8 +843,7 @@
           localStorage.setItem("autoReplyTime", now);
         }
         
-        // Send the customer query via EmailJS so that it reaches your email.
-        // Only attempt sending if EmailJS credentials are provided.
+        // Send the query via EmailJS if credentials exist
         if (emailjs_user && emailjs_service && emailjs_template) {
           emailjs.send(emailjs_service, emailjs_template, {
             message: queryText,
@@ -692,9 +851,9 @@
             from_email: params.get("email") || "visitor@example.com"
           })
           .then(function(response) {
-              console.log("Email sent successfully!", response.status, response.text);
+            console.log("Email sent successfully!", response.status, response.text);
           }, function(error) {
-              console.error("Failed to send email.", error);
+            console.error("Failed to send email.", error);
           });
         }
         chatQuery.value = "";
