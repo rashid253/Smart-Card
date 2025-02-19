@@ -1,0 +1,27 @@
+name: Deploy to Firebase Hosting
+
+on:
+  push:
+    branches:
+      - main  # یا اپنی branch کا نام رکھیں
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: GitHub سے کوڈ حاصل کریں
+        uses: actions/checkout@v3
+
+      - name: Node.js انسٹال کریں
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Firebase CLI انسٹال کریں
+        run: npm install -g firebase-tools
+
+      - name: Firebase Service Account کو فائل میں تبدیل کریں
+        run: echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT }}" > $HOME/serviceAccountKey.json
+
+      - name: Firebase پر ویب سائٹ اپلوڈ کریں
+        run: firebase deploy --only hosting --token "${{ secrets.FIREBASE_TOKEN }}"
