@@ -1,0 +1,37 @@
+{
+	"motd": {
+		"cloudBuildErrorAfter": 1594252800000,
+		"cloudBuildWarnAfter": 1590019200000,
+		"defaultNode10After": 1594252800000,
+		"minVersion": "3.0.5",
+		"node8DeploysDisabledAfter": 1613390400000,
+		"node8RuntimeDisabledAfter": 1615809600000,
+		"node8WarnAfter": 1600128000000,
+		"fetched": 1740015465141
+	},
+	"usage": true,
+	"analytics-uuid": "2dc75d37-d688-4765-8300-cecdd621570b",
+	"user": {
+		"iss": "accounts.google.com",
+		"azp": "563584335869-fgrhgmd47bqnekij5i8b5pr03ho849e6.apps.googleusercontent.com",
+		"aud": "563584335869-fgrhgmd47bqnekij5i8b5pr03ho849e6.apps.googleusercontent.com",
+		"sub": "102620063757128591270",
+		"email": "rashidncit@gmail.com",
+		"email_verified": true,
+		"at_hash": "FDtvaQVpfK5JCV3aUv0lIw",
+		"iat": 1740015492,
+		"exp": 1740019092
+	},
+	"tokens": {
+		"expires_at": 1740019091111,
+		"access_token": "ya29.a0AXeO80RnSt6x0YzUiAGVcJUKg9ObAiWIOMehB_9aGQVCC54PO7RbKRNeKS-rOwd0Rbh3Sar7BVvwmFEmupD-r7xE0uHDNHOcxb1a8ygsjdbf2KkLF5ggf1oqaV3pttNIMm_Qzpr3js7Jpg7_XDin_TbhhFmEKlDPEoCyOY0mhFjnuQaCgYKAZkSARISFQHGX2Mi7H25s8qNjdtDRb00s9HGrw0181",
+		"expires_in": 3599,
+		"refresh_token": "1//03v6f-HOUUauZCgYIARAAGAMSNwF-L9Irm4nFRYm9PCAl3LCXHWEunrbpc0JnK1RQnPp0J6OxzUA795mhGjarqH6L5tgLJctIigc",
+		"scope": "https://www.googleapis.com/auth/cloudplatformprojects.readonly https://www.googleapis.com/auth/firebase openid https://www.googleapis.com/auth/cloud-platform https://www.googleapis.com/auth/userinfo.email",
+		"token_type": "Bearer",
+		"id_token": "eyJhbGciOiJSUzI1NiIsImtpZCI6IjVkMTJhYjc4MmNiNjA5NjI4NWY2OWU0OGFlYTk5MDc5YmI1OWNiODYiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJhY2NvdW50cy5nb29nbGUuY29tIiwiYXpwIjoiNTYzNTg0MzM1ODY5LWZncmhnbWQ0N2JxbmVraWo1aThiNXByMDNobzg0OWU2LmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwiYXVkIjoiNTYzNTg0MzM1ODY5LWZncmhnbWQ0N2JxbmVraWo1aThiNXByMDNobzg0OWU2LmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwic3ViIjoiMTAyNjIwMDYzNzU3MTI4NTkxMjcwIiwiZW1haWwiOiJyYXNoaWRuY2l0QGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJhdF9oYXNoIjoiRkR0dmFRVnBmSzVKQ1YzYVV2MGxJdyIsImlhdCI6MTc0MDAxNTQ5MiwiZXhwIjoxNzQwMDE5MDkyfQ.UJ4DCGqL4Nb4KMXEcM9L6zW3qclDR6JLI2c74pVRtj0S9yhLrF_tnuxWx0u5zxvrz1wiKdGCoF2FTgeVkzBr5HPdufXRBbhSZ5hhlq_w3yhAz2Iv_685b7NXUbqsmio8QO--fGeW_SeBQZ67ds58kcefUPkIBmViC4I5X4aX1kXVBO87hScjlqhPukesTs7nW44Ggm1ETpUW6rJmkVGIIqtalImXxf2KBV3k0PB9d3MtIRTD6w4pEv2T-OheDbAS13nBP7oVcstas-tfot61K975Krpv4Vp9Ehvs6LhbFXfL2G8LleHET_KSs6GLnwJ6xuJhfwCcpCO1JZkL9YbC8A"
+	},
+	"activeProjects": {
+		"/data/data/com.termux/files/home": "visiting-card-6e1fc"
+	}
+}
