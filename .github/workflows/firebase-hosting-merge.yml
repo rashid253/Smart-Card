@@ -3,7 +3,7 @@ name: Deploy to Firebase Hosting on Merge
 on:
   push:
     branches:
-      - main
+      - main  # Ensure you are deploying from the correct branch
 
 jobs:
   build_and_deploy:
@@ -16,19 +16,12 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: 18  # Ensure this matches your Firebase setup
 
       - name: Install Firebase CLI
         run: npm install -g firebase-tools
 
-      - name: Build Project (if needed)
-        run: |
-          if [ -f "package.json" ]; then
-            npm install
-            npm run build || echo "No build step found, skipping..."
-          else
-            echo "No package.json found, assuming static site."
-          fi
-
       - name: Deploy to Firebase
-        run: firebase deploy --only hosting --token "${{ secrets.FIREBASE_DEPLOY_TOKEN }}"
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}  # Make sure you added this in GitHub Secrets
+        run: firebase deploy --only hosting --token "$FIREBASE_TOKEN"
