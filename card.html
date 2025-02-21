@@ -19,7 +19,7 @@
         --card-background: #ffffff;
         --body-bg: linear-gradient(135deg, #cfd8dc, #eceff1);
         --business-info-bg: #e0f7fa;
-        /* For dropdown header text */
+        /* For dropdown header text, use dark color */
         --dropdown-header-color: #333;
         --dropdown-btn-bg: #00796b;
         --dropdown-btn-hover: #00695c;
@@ -35,21 +35,21 @@
         min-height: 100vh;
         position: relative;
       }
-      /* Card Container with colorful border and rounded corners */
+      /* Card Container with rounded corners */
       .card-container {
         position: relative;
         width: 400px;
         max-width: 400px;
         background: var(--card-background);
-        border-radius: 25px; /* slightly round corners */
+        border-radius: 20px;
         border: 2px solid transparent;
-        border-image: linear-gradient(45deg, var(--secondary-color), var(--accent-color), #3F51B5) 1;
+        border-image: linear-gradient(45deg, var(--secondary-color), var(--accent-color), #3f51b5) 1;
         box-shadow: 0 8px 30px rgba(0,0,0,0.2);
         padding: 1.5rem;
         margin: 1rem;
         transition: background-color 0.5s ease, box-shadow 0.5s ease;
       }
-      /* Top Left Settings Icon */
+      /* Top Left Settings Icon (remains in place) */
       #styleControlsContainer {
         position: absolute;
         top: 10px;
@@ -85,26 +85,28 @@
       .top-share-icon:hover {
         color: var(--secondary-color);
       }
-      /* Settings Dropdown Panel */
+      /* Settings Dropdown Panel (narrow and partly outside the card) */
       #styleDropdown {
         display: none;
         position: absolute;
         top: 110%;
-        left: -20px;
+        left: -20px; /* About half inside, half outside */
         background: #fff;
         border: 1px solid #ccc;
         border-radius: 4px;
         z-index: 10;
         font-size: 0.75rem;
-        width: 100px;
+        width: 80px; /* Reduced width */
         box-shadow: 0 2px 6px rgba(0,0,0,0.2);
       }
+      /* Each Settings Group */
       .setting-group {
         border-bottom: 1px solid #ddd;
       }
       .setting-group:last-child {
         border-bottom: none;
       }
+      /* 3D Effect for Group Headers ("Theme", "Mood", "Style") */
       .setting-header {
         background: linear-gradient(to bottom, #f8f8f8, #dcdcdc);
         border: 1px solid #ccc;
@@ -122,6 +124,7 @@
         box-shadow: 3px 3px 7px rgba(0,0,0,0.4);
         transform: translateY(-1px);
       }
+      /* Content inside each group */
       .setting-content {
         display: none;
         padding: 5px;
@@ -141,6 +144,7 @@
         background: var(--secondary-color);
         color: #fff;
       }
+      /* Buttons inside each group (stacked vertically) */
       .dropdown-btns {
         display: flex;
         flex-direction: column;
@@ -160,7 +164,7 @@
         background: var(--dropdown-btn-hover);
         box-shadow: 1px 1px 3px rgba(0,0,0,0.3);
       }
-      /* Mini Icons */
+      /* Mini Icons (Call, Email, WhatsApp, Map) */
       .mini-icons {
         display: flex;
         justify-content: center;
@@ -249,7 +253,7 @@
         background: var(--business-info-bg);
         border-bottom: 2px solid var(--secondary-color);
         font-family: "Georgia", serif;
-        border-radius: 25px;
+        border-radius: 20px;
         position: relative;
       }
       .business-info-content {
@@ -315,11 +319,11 @@
         transform: translateY(-2px);
         box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
       }
-      /* Floating Feedback Button (fixed) */
-      .floating-btn {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
+      /* New Feedback Button (moved to replace live chat icon) */
+      #feedbackBtn {
+        position: absolute;
+        top: 40px;
+        right: -20px; /* Overlapping the card border */
         background: var(--secondary-color);
         color: #fff;
         border: none;
@@ -329,10 +333,9 @@
         cursor: pointer;
         font-size: 1.5rem;
         box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-        margin-bottom: 10px;
         transition: transform 0.3s, box-shadow 0.3s;
       }
-      .floating-btn:hover {
+      #feedbackBtn:hover {
         background: var(--accent-color);
         transform: scale(1.1);
       }
@@ -383,6 +386,7 @@
                 <li data-theme="green">Green</li>
               </ul>
               <div class="dropdown-btns">
+                <!-- Preview button removed -->
                 <button class="apply-btn" data-group="theme">Apply</button>
               </div>
             </div>
@@ -396,6 +400,7 @@
                 <li data-mood="night">Night</li>
               </ul>
               <div class="dropdown-btns">
+                <!-- Preview button removed -->
                 <button class="apply-btn" data-group="mood">Apply</button>
               </div>
             </div>
@@ -410,6 +415,7 @@
                 <li data-iconstyle="styleB">Style B</li>
               </ul>
               <div class="dropdown-btns">
+                <!-- Preview button removed -->
                 <button class="apply-btn" data-group="style">Apply</button>
               </div>
             </div>
@@ -482,25 +488,20 @@
           <i class="fab fa-youtube"></i>
         </a>
       </div>
+      <!-- Moved Feedback Button (replacing live chat) -->
+      <button id="feedbackBtn" title="Feedback" onclick="window.location.href='mailto:rashidncit@gmail.com?subject=Feedback on Business Card'">
+        <i class="fas fa-comment-dots"></i>
+      </button>
     </div>
-    <!-- Floating Feedback Button (fixed) -->
-    <button class="floating-btn feedback" title="Feedback" onclick="window.location.href='mailto:rashidncit@gmail.com?subject=Feedback on Business Card'">
-      <i class="fas fa-comment-dots"></i>
-    </button>
-
     <script>
       document.addEventListener("DOMContentLoaded", function () {
+        // Variables for settings
+        let selectedTheme = "default";
+        let selectedMood = "day";
+        let selectedIconStyle = "none";
         const params = new URLSearchParams(window.location.search);
-
-        // Set up applied settings from URL or defaults
-        let appliedTheme = params.get("theme") || "default";
-        let appliedMood = params.get("mood") || "day";
-        let appliedIconStyle = params.get("iconstyle") || "none";
-        // Preview settings start equal to applied ones
-        let previewTheme = appliedTheme;
-        let previewMood = appliedMood;
-        let previewIconStyle = appliedIconStyle;
-
+        console.log("Current URL:", window.location.href);
+        
         /* -------------------- Populate Card Info -------------------- */
         const profileImage = params.get("profileImage") || "";
         document.getElementById("cardProfileImage").src = profileImage;
@@ -509,11 +510,13 @@
         document.getElementById("cardAddress").textContent = params.get("address") || "";
         document.getElementById("cardPhone").textContent = params.get("phone") || "";
         document.getElementById("cardEmail").textContent = params.get("email") || "";
-
+        
         const businessInfo = params.get("businessInfo") || "";
-        const paragraphs = businessInfo.split("\n").filter(p => p.trim() !== "");
+        const paragraphs = businessInfo.split("\n").filter((p) => p.trim() !== "");
         const businessInfoContainer = document.getElementById("businessInfoContent");
-        businessInfoContainer.innerHTML = paragraphs.map(p => `<div class="business-info-content"><p>${p}</p></div>`).join("");
+        businessInfoContainer.innerHTML = paragraphs
+          .map((p) => `<div class="business-info-content"><p>${p}</p></div>`)
+          .join("");
         const paragraphDivs = businessInfoContainer.querySelectorAll(".business-info-content");
         let currentIndex = 0;
         paragraphDivs.forEach((div, idx) => {
@@ -531,7 +534,7 @@
         const socialLinks = {
           facebook: document.getElementById("facebookButton"),
           instagram: document.getElementById("instagramButton"),
-          youtube: document.getElementById("youtubeButton")
+          youtube: document.getElementById("youtubeButton"),
         };
         Object.entries(socialLinks).forEach(([platform, element]) => {
           const url = params.get(platform);
@@ -555,9 +558,8 @@
           if (emailParam) window.location.href = `mailto:${emailParam}`;
         };
         document.getElementById("miniWhatsappButton").onclick = () => {
-          if (phoneParam) {
+          if (phoneParam)
             window.location.href = `https://wa.me/${phoneParam}?text=${encodeURIComponent("I am contacting by smart link visiting card")}`;
-          }
         };
         document.getElementById("miniMapButton").onclick = () => {
           if (addressParam) {
@@ -565,7 +567,7 @@
             window.open(`https://www.google.com/maps?q=${encodedAddr}`, "_blank");
           }
         };
-
+        
         /* -------------------- Connect (vCard) -------------------- */
         document.getElementById("connectButton").onclick = () => {
           const name = params.get("name") || "Contact";
@@ -583,7 +585,7 @@
           link.click();
           URL.revokeObjectURL(url);
         };
-
+        
         /* -------------------- Action Buttons -------------------- */
         const callButton = document.getElementById("callButton");
         const whatsappButton = document.getElementById("whatsappButton");
@@ -602,9 +604,11 @@
         }
         callButton.addEventListener("click", function (e) {
           e.preventDefault();
-          setTimeout(() => { window.location.href = callButton.href; }, 100);
+          setTimeout(() => {
+            window.location.href = callButton.href;
+          }, 100);
         });
-
+        
         /* -------------------- Share Icon -------------------- */
         document.getElementById("topShareIcon").onclick = async () => {
           try {
@@ -612,7 +616,7 @@
               await navigator.share({
                 title: params.get("name") || "My Business Card",
                 text: "Check out this business card",
-                url: window.location.href
+                url: window.location.href,
               });
             } else {
               alert("Sharing is not supported on this browser.");
@@ -621,88 +625,86 @@
             console.error("Error sharing:", err);
           }
         };
-
+        
         /* -------------------- Settings Dropdown Behavior -------------------- */
         const styleButton = document.getElementById("styleButton");
         const styleDropdown = document.getElementById("styleDropdown");
         styleButton.addEventListener("click", (e) => {
           e.stopPropagation();
-          styleDropdown.style.display = styleDropdown.style.display === "block" ? "none" : "block";
+          styleDropdown.style.display =
+            styleDropdown.style.display === "block" ? "none" : "block";
         });
-        // When clicking outside the settings panel, hide it and revert preview settings to applied values.
         document.addEventListener("click", (e) => {
           if (!document.getElementById("styleControlsContainer").contains(e.target)) {
             styleDropdown.style.display = "none";
-            previewTheme = appliedTheme;
-            previewMood = appliedMood;
-            previewIconStyle = appliedIconStyle;
-            updateCardAppearance();
           }
         });
-
-        // Toggle visibility of each group’s content on header click.
+        // Toggle each group’s content on header click
         document.querySelectorAll(".setting-header").forEach((header) => {
           header.addEventListener("click", () => {
             const content = header.nextElementSibling;
             content.style.display = content.style.display === "block" ? "none" : "block";
           });
         });
-
-        /* -------------------- Settings Option Selection (Preview Only) -------------------- */
+        
+        /* -------------------- Settings Option Selection -------------------- */
         // For Theme
         document.querySelectorAll("#themeGroup .setting-options li").forEach((li) => {
           li.addEventListener("click", () => {
-            previewTheme = li.getAttribute("data-theme");
-            document.querySelectorAll("#themeGroup .setting-options li").forEach(el => el.style.background = "");
+            selectedTheme = li.getAttribute("data-theme");
+            document.querySelectorAll("#themeGroup .setting-options li").forEach(
+              (el) => (el.style.background = "")
+            );
             li.style.background = "#ddd";
-            updateCardAppearance();
           });
         });
         // For Mood
         document.querySelectorAll("#moodGroup .setting-options li").forEach((li) => {
           li.addEventListener("click", () => {
-            previewMood = li.getAttribute("data-mood");
-            document.querySelectorAll("#moodGroup .setting-options li").forEach(el => el.style.background = "");
+            selectedMood = li.getAttribute("data-mood");
+            document.querySelectorAll("#moodGroup .setting-options li").forEach(
+              (el) => (el.style.background = "")
+            );
             li.style.background = "#ddd";
-            updateCardAppearance();
           });
         });
-        // For Icon Style
+        // For Icon Style (Style)
         document.querySelectorAll("#iconStyleGroup .setting-options li").forEach((li) => {
           li.addEventListener("click", () => {
-            previewIconStyle = li.getAttribute("data-iconstyle");
-            document.querySelectorAll("#iconStyleGroup .setting-options li").forEach(el => el.style.background = "");
+            selectedIconStyle = li.getAttribute("data-iconstyle");
+            document.querySelectorAll("#iconStyleGroup .setting-options li").forEach(
+              (el) => (el.style.background = "")
+            );
             li.style.background = "#ddd";
-            updateCardAppearance();
           });
         });
-
-        /* -------------------- Update Card Appearance Using Preview Settings -------------------- */
+        
+        /* -------------------- Update Card Appearance -------------------- */
         function updateCardAppearance() {
           const card = document.querySelector(".card-container");
-          // Apply Theme Colors based on previewTheme
-          if (previewTheme === "default") {
+          // Apply Theme Colors
+          if (selectedTheme === "default") {
             document.documentElement.style.setProperty("--secondary-color", "#009688");
             document.documentElement.style.setProperty("--accent-color", "#FF5722");
             document.documentElement.style.setProperty("--card-background", "#FFFFFF");
             document.documentElement.style.setProperty("--body-bg", "linear-gradient(135deg, #CFD8DC, #ECEFF1)");
             card.style.borderImage = `linear-gradient(45deg, #009688, #FF5722, #3F51B5) 1`;
             card.style.boxShadow = "0 8px 30px rgba(0,0,0,0.2)";
-          } else if (previewTheme === "blue") {
+          } else if (selectedTheme === "blue") {
             document.documentElement.style.setProperty("--secondary-color", "#2196F3");
             document.documentElement.style.setProperty("--accent-color", "#E91E63");
             document.documentElement.style.setProperty("--card-background", "#F0F8FF");
             document.documentElement.style.setProperty("--body-bg", "linear-gradient(135deg, #BBDEFB, #E3F2FD)");
             card.style.borderImage = `linear-gradient(45deg, #2196F3, #E91E63, #3F51B5) 1`;
             card.style.boxShadow = "0 8px 30px rgba(33,150,243,0.4)";
-          } else if (previewTheme === "red") {
+          } else if (selectedTheme === "red") {
             document.documentElement.style.setProperty("--secondary-color", "#F44336");
             document.documentElement.style.setProperty("--accent-color", "#9C27B0");
             document.documentElement.style.setProperty("--card-background", "#FFF0F0");
             document.documentElement.style.setProperty("--body-bg", "linear-gradient(135deg, #FFCDD2, #FFEBEE)");
             card.style.borderImage = `linear-gradient(45deg, #F44336, #9C27B0, #FF9800) 1`;
             card.style.boxShadow = "0 8px 30px rgba(244,67,54,0.4)";
-          } else if (previewTheme === "green") {
+          } else if (selectedTheme === "green") {
             document.documentElement.style.setProperty("--secondary-color", "#4CAF50");
             document.documentElement.style.setProperty("--accent-color", "#8BC34A");
             document.documentElement.style.setProperty("--card-background", "#E8F5E9");
@@ -710,8 +712,8 @@
             card.style.borderImage = `linear-gradient(45deg, #4CAF50, #8BC34A, #388E3C) 1`;
             card.style.boxShadow = "0 8px 30px rgba(76,175,80,0.4)";
           }
-          // Apply Mood settings based on previewMood
-          if (previewMood === "night") {
+          // Apply Mood
+          if (selectedMood === "night") {
             document.documentElement.style.setProperty("--card-background", "#2b2b2b");
             document.documentElement.style.setProperty("--body-bg", "linear-gradient(135deg, #1a1a1a, #333333)");
             document.documentElement.style.setProperty("--primary-color", "#f0f0f0");
@@ -724,61 +726,53 @@
             document.documentElement.style.setProperty("--neutral-dark", "#333333");
             document.documentElement.style.setProperty("--business-info-bg", "#e0f7fa");
           }
-          // Apply Icon Style based on previewIconStyle
-          if (previewIconStyle === "styleA") {
-            document.querySelectorAll(".icon").forEach(el => {
+          // Apply Icon Style Changes
+          if (selectedIconStyle === "styleA") {
+            document.querySelectorAll(".icon").forEach((el) => {
               el.style.borderRadius = "10px";
               el.style.backgroundColor = "rgba(0,150,136,0.2)";
             });
-            document.querySelectorAll(".social-icon").forEach(el => {
+            document.querySelectorAll(".social-icon").forEach((el) => {
               el.style.borderRadius = "10px";
               el.style.backgroundColor = "rgba(0,150,136,0.2)";
             });
-          } else if (previewIconStyle === "styleB") {
-            document.querySelectorAll(".icon").forEach(el => {
+          } else if (selectedIconStyle === "styleB") {
+            document.querySelectorAll(".icon").forEach((el) => {
               el.style.borderRadius = "0px";
               el.style.backgroundColor = "rgba(233,30,99,0.2)";
             });
-            document.querySelectorAll(".social-icon").forEach(el => {
+            document.querySelectorAll(".social-icon").forEach((el) => {
               el.style.borderRadius = "0px";
               el.style.backgroundColor = "rgba(233,30,99,0.2)";
             });
           } else {
-            document.querySelectorAll(".icon").forEach(el => {
+            // "none" – revert to CSS defaults
+            document.querySelectorAll(".icon").forEach((el) => {
               el.style.borderRadius = "";
               el.style.backgroundColor = "";
             });
-            document.querySelectorAll(".social-icon").forEach(el => {
+            document.querySelectorAll(".social-icon").forEach((el) => {
               el.style.borderRadius = "";
               el.style.backgroundColor = "";
             });
           }
         }
-        
-        /* -------------------- Update Applied Settings & Save URL -------------------- */
         function updateCardAppearanceAndSave() {
-          // Update applied settings from the current preview values
-          appliedTheme = previewTheme;
-          appliedMood = previewMood;
-          appliedIconStyle = previewIconStyle;
           updateCardAppearance();
           const newUrl = new URL(window.location.href);
-          newUrl.searchParams.set("theme", appliedTheme);
-          newUrl.searchParams.set("mood", appliedMood);
-          newUrl.searchParams.set("iconstyle", appliedIconStyle);
+          newUrl.searchParams.set("theme", selectedTheme);
+          newUrl.searchParams.set("mood", selectedMood);
+          newUrl.searchParams.set("iconstyle", selectedIconStyle);
           history.replaceState(null, "", newUrl.toString());
         }
         
         /* -------------------- Group Apply Handlers -------------------- */
-        document.querySelectorAll(".apply-btn").forEach(btn => {
+        document.querySelectorAll(".apply-btn").forEach((btn) => {
           btn.addEventListener("click", () => {
             updateCardAppearanceAndSave();
             btn.closest(".setting-content").style.display = "none";
           });
         });
-        
-        // On page load, apply the saved settings.
-        updateCardAppearance();
       });
     </script>
   </body>
