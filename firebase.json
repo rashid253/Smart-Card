@@ -1,12 +1,16 @@
 {
   "hosting": {
-    "public": ".", 
+    "public": "public",
     "ignore": [
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
     ],
     "rewrites": [
+      {
+        "source": "/admin-panel.html",
+        "destination": "/admin-panel.html"
+      },
       {
         "source": "**",
         "destination": "/index.html"
